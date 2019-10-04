@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GOT HangMan</title>
+    <script src="assets/javascript/game.js"></script>
+    <!-- linking reset css disabled reset css since it messed up font size/argins can fix later -->
+    <!-- <link rel="stylesheet" href="assets/css/reset.css"> -->
+    <!-- linking css style sheet -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- linking GOT font css -->
+    <link rel="stylesheet" href="assets/GOT_font/stylesheet.css">
+    <!-- JQuery -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+
+
+</head>
+
+<body>
+    <!-- adding audio -->
+
+    <audio autoplay controls loop >
+        <source src="assets/music/Game_of_Thrones.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- titles -->
+    <h1> Game Of Thrones</h1>
+    <h4>Presents: </h4><h2>Battle of the bastards</h2>
+
+    <!-- Statement of press any key to get Started -->
+    <p> Press any key to get started!</p>
+    <div id="wins">
+        Wins:
+    </div>
+    <div id="losses">
+        Losses:
+    </div>
+
+
+
+
+<!-- adding div so letter display -->
+    <div id="display"></div>
+    
+    
+    <div id="wordschosen">
+
+    </div>
+
+
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+
+            document.onkeyup = function (event) {
+                // console.log(event.key);
+                var userLetter = $("<div>");
+                userLetter.addClass("letter firdge-color");
+                userLetter.text($(this).attr("data-letter"));
+                $("#display").append(userLetter);
+            }
+
+
+
+
+
+
+        });
+    </script>
+
+
+</body>
+
+</html>
