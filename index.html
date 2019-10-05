@@ -35,31 +35,66 @@
 
 
   <div id="guessed"> </div>
-
-
-
-
+  <br>
+  <br>
+  <div id="needs-guessing"></div>
+  <br>
+  <br>
+  <div id="guessed-right"></div>
 
 
 
   <script type="text/javascript">
 
     var wordsToGuess = ["MEEREEN", "BRAAVOS", "VALYRIA", "MAESTER", "WILDING", "THE WALL", "JON SNOW"];
-    var possibleUserGuess = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+    // var possibleUserGuess = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
     var lettersGuessed = [];
+    var wordChosenByComputer = wordsToGuess[Math.floor(Math.random() * wordsToGuess.length)];
+    var letterGuessedRight = [];
+
+
 
     document.onkeyup = function (event) {
       var userguess = String.fromCharCode(event.keyCode);
       // console.log(userguess);
 
       // the below pushes the usersguess ino the lettersGuessed variable
-      lettersGuessed.push(userguess);
-      console.log(lettersGuessed);
-      console.log(lettersGuessed.length);
+      function guessedWrong() {
+        lettersGuessed.push(userguess);
+        // console.log(lettersGuessed);
+        var html = "<p>Letters you have guessed</p>" + "<p>" + lettersGuessed.join(',') + "</p>";
+        document.querySelector('#guessed').innerHTML = html;
+
+      }
+
+      function guessedRight() {
+        letterGuessedRight.push(userguess);
+        console.log(userguess);
+        var html = "<p>" + letterGuessedRight + "</p>";
+        document.querySelector("#guessed-right").innerHTML = html;
+      }
+
+      // the below pushes the lettersguessed right into the lettersguessedright variable array
+
+
 
       // the below displays the lettersguessed variable into the screen
-      var html = "<p>words you have guessed</p>" + "<p>" + lettersGuessed.join(',') + "</p>";
-      document.querySelector('#guessed').innerHTML = html;
+
+
+      // the below displays the wordChosenByComputer into the screen
+      var html = "<p>" + wordChosenByComputer + "</p>";
+      document.querySelector("#needs-guessing").innerHTML = html;
+
+      for (var i = 0; i < wordChosenByComputer.length; i++) {
+        // console.log(wordChosenByComputer[i]);
+        if (userguess === wordChosenByComputer[i]) {
+          // this if function checks wether the user guessed a letter within the wordChosenByComputer
+          guessedRight();
+
+        } else {
+          guessedWrong();
+        }
+      }
 
 
 
