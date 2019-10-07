@@ -19,97 +19,168 @@
 
 </head>
 
-<body>
+<body id="main-body">
+
+
   <!-- adding audio -->
   <audio controls autoplay loop hidden>
     <source src="assets/music/Game_of_Thrones.mp3" type="audio/mp3">
   </audio>
 
   <!-- titles -->
-  <h1> Game Of Thrones</h1>
+  <!-- <h1> Game Of Thrones</h1>
   <h4>Presents: </h4>
-  <h2>Battle of the bastards</h2>
+  <h2>Battle of the bastards</h2> -->
 
   <!-- Statement of press any key to get Started -->
-  <p> Press any key to get started!</p>
+  <p> Start guessing by selecting any letter in your keyboard!  </p>
 
 
   <div id="guessed"> </div>
-  <br>
-  <br>
+
   <div id="needs-guessing"></div>
-  <br>
-  <br>
+
   <div id="guessed-right"></div>
 
+  <div id="triesLeftCounter"></div>
+
+  <button onclick="startGame()" id="startButton">Start Game</button>
+  <button onclick="tryAgainGame()" id="tryAgainButton">TRY AGAIN</button>
+  <style>
+    #underscores {
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    #startButton {
+      height: 100px;
+      width: 200px;
+      position: absolute;
+      left: 40%;
+      top: 75%;
+      font-size: 25px;
+    }
+
+    #tryAgainButton {
+      height: 100px;
+      width: 200px;
+      position: absolute;
+      left: 40%;
+      top: 75%;
+      font-size: 25px;
+      visibility: hidden;
+    }
+  </style>
 
 
   <script type="text/javascript">
-
-    var wordsToGuess = ["MEEREEN", "BRAAVOS", "VALYRIA", "MAESTER", "WILDING", "THE WALL", "JON SNOW"];
-    // var possibleUserGuess = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-    var lettersGuessed = [];
+    var started = false;
+    var wordsToGuess = ["MEEREEN", "BRAAVOS", "VALYRIA", "MAESTER", "WILDING"];
     var wordChosenByComputer = wordsToGuess[Math.floor(Math.random() * wordsToGuess.length)];
-    var letterGuessedRight = [];
+    var wordChosenByComputerBrokenDown = [];
+    var lettersGuessedWrong = [];
+    var letterGuessedRight = ["_", "_", "_", "_", "_", "_", "_"];
+    var guessedAlready = [];
+    var userguess = [];
+    var lossCounter = 0;
+    var triesLeft = 10;
 
+    function tryAgainGame() {
+      wordChosenByComputer = wordsToGuess[Math.floor(Math.random() * wordsToGuess.length)];
+      wordChosenByComputerBrokenDown = [];
+      lettersGuessedWrong = [];
+      letterGuessedRight = ["_", "_", "_", "_", "_", "_", "_"];
+      guessedAlready = [];
+      userguess = [];
+      lossCounter = 0;
+      triesLeft = 10;
+      startGame()
+    }
 
-
-    document.onkeyup = function (event) {
-      var userguess = String.fromCharCode(event.keyCode);
-      // console.log(userguess);
-
-      // the below pushes the usersguess ino the lettersGuessed variable
-      function guessedWrong() {
-        lettersGuessed.push(userguess);
-        // console.log(lettersGuessed);
-        var html = "<p>Letters you have guessed</p>" + "<p>" + lettersGuessed.join(',') + "</p>";
-        document.querySelector('#guessed').innerHTML = html;
-
-      }
-
-      function guessedRight() {
-        letterGuessedRight.push(userguess);
-        console.log(userguess);
-        var html = "<p>" + letterGuessedRight + "</p>";
-        document.querySelector("#guessed-right").innerHTML = html;
-      }
-
-      // the below pushes the lettersguessed right into the lettersguessedright variable array
-
-
-
-      // the below displays the lettersguessed variable into the screen
-
-
-      // the below displays the wordChosenByComputer into the screen
-      var html = "<p>" + wordChosenByComputer + "</p>";
-      document.querySelector("#needs-guessing").innerHTML = html;
-
+    function startGame() {
+      document.getElementById("startButton").style.visibility = "hidden";
+      document.getElementById("tryAgainButton").style.visibility = "hidden";
+      document.body.style.backgroundImage = "url('./assets/images/game-background.jpg')";
+      // breaks down the word chosen by computer into an array od strings instead of keeping it as an array with 1 word
       for (var i = 0; i < wordChosenByComputer.length; i++) {
-        // console.log(wordChosenByComputer[i]);
-        if (userguess === wordChosenByComputer[i]) {
-          // this if function checks wether the user guessed a letter within the wordChosenByComputer
-          guessedRight();
-
-        } else {
-          guessedWrong();
-        }
+        wordChosenByComputerBrokenDown.push(wordChosenByComputer[i]);
       }
+      // the below displays te dashes for the word that is trying to be guessed
+      var html = "<p>" + letterGuessedRight.join(' ') + "</p>";
+      document.querySelector("#guessed-right").innerHTML = html;
 
 
+      document.onkeydown = function (event) {
+        userguess = String.fromCharCode(event.keyCode);
 
-      // for (var i = 0; i < possibleUserGuess.length; i++) {
 
-      //   // console.log(possibleUserGuess[i])
+        if (wordChosenByComputer.indexOf(userguess) === -1) {
+          if (guessedAlready.indexOf(userguess) === -1) {
+            guessedAlready.push(userguess);
+            triesLeft--;
+          } else {
+            alert("This letter has been guessed already!");
+            return;
+          }
+        }
 
-      //     if (userChoice === possibleUserGuess[i]) {
-      //     console.log("good word choice");
-      //     return;
-      //   } else {
-      //     alert("please select letter from alphabet only");
-      //     return;
-      //   }
-      // }
+        if (triesLeft === 0) {
+          alert("YOU KNOW NOTHING JON SNOW!");
+          document.body.style.backgroundImage = "url('./assets/images/z.lost.gif')";
+          document.getElementById("tryAgainButton").style.visibility = "visible";
+        }
+
+        var html = "<p>Guesses you have left: </p>" + "<p>" + triesLeft + "</p>";
+        document.querySelector('#triesLeftCounter').innerHTML = html;
+
+        var html = "<p>Letters you have guessed</p>" + "<p>" + guessedAlready.join(' ') + "</p>";
+        document.querySelector('#guessed').innerHTML = html;
+        // check if userguess is within wordChosenByComputerBrokenDown for [i] 
+
+        if (wordChosenByComputerBrokenDown.indexOf(userguess) === -1) {
+          lossCounter++;
+          // console.log(lossCounter);
+          if (lossCounter === 1) {
+            document.body.style.backgroundImage = "url('./assets/images/stampede2.jpg')";
+          } else if (lossCounter === 2) {
+            document.body.style.backgroundImage = "url('./assets/images/stampede3.jpg')";
+          } else if (lossCounter === 3) {
+            document.body.style.backgroundImage = "url('./assets/images/stampede4.jpg')";
+          } else if (lossCounter === 4) {
+            document.body.style.backgroundImage = "url('./assets/images/stampede5.jpg')";
+          } else if (lossCounter === 5) {
+            document.body.style.backgroundImage = "url('./assets/images/stampede6.jpg')";
+          } else if (lossCounter === 6) {
+            document.body.style.backgroundImage = "url('./assets/images/stampede7.jpg')";
+          } else if (lossCounter === 7) {
+            document.body.style.backgroundImage = "url('./assets/images/stampede8.jpg')";
+          } else if (lossCounter === 8) {
+            document.body.style.backgroundImage = "url('./assets/images/stampede9.jpg')";
+          } else if (lossCounter === 9) {
+            document.body.style.backgroundImage = "url('./assets/images/stampede10.jpg')";
+          }
+        }
+
+        for (var i = 0; i < wordChosenByComputerBrokenDown.length; i++) {
+          if (userguess === wordChosenByComputerBrokenDown[i]) {
+            guessedRight();
+          }
+        }
+
+
+        function guessedRight() {
+          letterGuessedRight.splice([i], 1, wordChosenByComputerBrokenDown[i]);
+          var html = "<p>" + letterGuessedRight.join(' ') + "</p>";
+          document.querySelector("#guessed-right").innerHTML = html;
+          if ((letterGuessedRight.join('')) === wordChosenByComputer) {
+            alert("YOU G.O.T IT!!")
+            document.body.style.backgroundImage = "url('./assets/images/winner5.jpg')";
+          document.getElementById("tryAgainButton").style.visibility = "visible";
+
+          }
+        }
+
+      }
 
 
     }
