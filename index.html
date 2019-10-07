@@ -33,7 +33,7 @@
   <h2>Battle of the bastards</h2> -->
 
   <!-- Statement of press any key to get Started -->
-  <p> Start guessing by selecting any letter in your keyboard!  </p>
+  <p id="startByGuessingLetter"> Start guessing by selecting any letter in your keyboard!  </p>
 
 
   <div id="guessed"> </div>
@@ -100,7 +100,10 @@
     function startGame() {
       document.getElementById("startButton").style.visibility = "hidden";
       document.getElementById("tryAgainButton").style.visibility = "hidden";
-      document.body.style.backgroundImage = "url('./assets/images/game-background.jpg')";
+      document.body.style.backgroundImage = "url('./assets/images/a-ready.gif')";
+      // document.body.classList.add('fade');
+      // document.body.style.backgroundImage = "url('./assets/images/game-background.jpg')";
+
       // breaks down the word chosen by computer into an array od strings instead of keeping it as an array with 1 word
       for (var i = 0; i < wordChosenByComputer.length; i++) {
         wordChosenByComputerBrokenDown.push(wordChosenByComputer[i]);
